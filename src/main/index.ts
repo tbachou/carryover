@@ -18,7 +18,12 @@ function createWindow(): void {
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
+      // Sandboxed renderer (Electron's own default since v20, made explicit
+      // here). The preload only touches contextBridge/ipcRenderer — both
+      // available under the sandbox — so there's no need to weaken this for
+      // a public-download app. contextIsolation/nodeIntegration are left on
+      // Electron's secure defaults (true/false) rather than restated here.
+      sandbox: true,
     },
   });
 

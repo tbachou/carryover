@@ -1,0 +1,22 @@
+appId: com.tonychou.carryover
+productName: Carryover
+directories:
+  output: release
+files:
+  - out/**/*
+# skills/*.md are read from disk at runtime, not bundled into the JS -
+# extraResources copies them into the packaged app's Resources folder.
+extraResources:
+  - from: skills
+    to: skills
+mac:
+  target:
+    - dmg
+    - zip
+  category: public.app-category.healthcare-fitness
+  # No Apple Developer account yet for this early beta - skip code signing
+  # entirely rather than let electron-builder try to auto-discover an
+  # identity and fail. Testers see an "unidentified developer" Gatekeeper
+  # warning and right-click Open the first time; acceptable for an
+  # invite-only beta, revisit if this goes to wider distribution.
+  identity: null
