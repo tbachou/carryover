@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import type { CareSetting, CaseProfile } from '@shared/types';
 import { CARE_SETTING_LABELS } from '@shared/types';
 import { containsLikelyDiagnosticTerm } from '../diagnosticTermGuard';
+import { PhiWarningBanner } from './PhiWarningBanner';
 
 const SETTINGS: CareSetting[] = ['home-health', 'outpatient', 'skilled-nursing', 'inpatient-rehab'];
 
@@ -64,6 +65,8 @@ export function CaseProfileForm({
         Enter what you'd already have from your own eval. Describe function, not diagnosis —
         Carryover never asks for or infers one.
       </p>
+
+      <PhiWarningBanner />
 
       <div className="case-form__field">
         <label htmlFor="presentation">Functional presentation</label>

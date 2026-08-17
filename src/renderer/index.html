@@ -7,6 +7,14 @@
   </head>
   <body>
     <div id="root"></div>
+    <!--
+      Print target, outside #root entirely. DraftHandoutView portals a
+      minimal, accepted-only view of the current draft in here; styles.css
+      hides #root and shows only this under @media print, so printing can
+      never pick up the sidebar/history or unaccepted exercises -- they
+      live in #root, which isn't there when printing.
+    -->
+    <div id="print-root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

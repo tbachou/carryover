@@ -1,5 +1,10 @@
+import { createPortal } from 'react-dom';
 import type { DraftExercise, HandoutDraft } from '@shared/types';
 import { DisclaimerBanner } from './DisclaimerBanner';
+import { PrintableHandout } from './PrintableHandout';
+import { formatHandoutText } from './exportHandout';
+
+const printRoot = typeof document !== 'undefined' ? document.getElementById('print-root') : null;
 
 export function DraftHandoutView({
   draft,
@@ -69,6 +74,18 @@ export function DraftHandoutView({
           </p>
         ) : null}
       </div>
+
+      {/*
+        Portaled into #print-root (outside #root — see index.html), not
+        rendered inline here. This is a normal child in React's tree
+        despite the different DOM location, so it re-renders on every
+        `draft` change (e.g. each accept-checkbox toggle) exactly like the
+        rest of this component. @media print in styles.css hides #root and
+        shows only #print-root, so this — accepted exercises + general
+        notes only, via getExportablePayload — is the entirety of what
+        Print can ever produce.
+      */}
+      {printRoot ? createPortal(<PrintableHandout draft={draft} />, printRoot) : null}
     </div>
   );
 }
@@ -98,19 +115,4 @@ function ExerciseCard({ exercise, onToggleAccept }: { exercise: DraftExercise; o
       ) : null}
     </li>
   );
-}
-
-function formatHandoutText(draft: HandoutDraft): string {
-  const lines = [
-    'DRAFT HOME EXERCISE PROGRAM — reviewed and signed off by treating clinician.',
-    'Not medical advice on its own; reflects the clinician\'s review of this draft.',
-    '',
-  ];
-  for (const exercise of draft.exercises.filter((e) => e.accepted)) {
-    lines.push(`${exercise.name} — ${exercise.setsReps}`);
-    lines.push(exercise.instructions);
-    for (const flag of exercise.safetyFlags) lines.push(`Note: ${flag}`);
-    lines.push('');
-  }
-  return lines.join('\n');
 }
